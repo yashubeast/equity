@@ -75,6 +75,19 @@ class BankDB:
             VALUES ('Tax',?)''', (rate,))
         self.connection.commit()
 
+    def bonus_rate(self):
+        self.cursor.execute('''SELECT Value FROM Settings Where Item = 'Bonus' ''')
+        result = self.cursor.fetchone()
+        if result is None:
+            return 0.1
+        return result[0]
+    
+    def set_bonus(self, rate):
+        self.cursor.execute('''
+            INSERT OR REPLACE INTO Settings (Item, Value)
+            VALUES ('Bonus',?)''', (rate,))
+        self.connection.commit()
+
     def get_balance(self, discord_id):
         # Retrieve the balance for a specific DiscordID
         self.cursor.execute('''

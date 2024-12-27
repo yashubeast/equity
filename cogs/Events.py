@@ -30,12 +30,13 @@ class EventCog(commands.Cog):
         DB = BankDB()
         messages = DB.get_messages(user.id)
         lastmessage = DB.get_last_message(user.id)
+        bonus = DB.bonus_rate()
         lastmessage = datetime.datetime.strptime(lastmessage, "%Y-%m-%d %H:%M:%S.%f")
         time_difference = (current_datetime - lastmessage).total_seconds()
         time_difference = time_difference * .15
         if time_difference > 1:
             time_difference = 1
-        total = len(message.content) * (1+(messages/100)) * time_difference
+        total = len(message.content) * (1+(bonus*messages)) * time_difference
         tax = DB.tax_rate()
         userCoins = int(total)
         totaltax = userCoins * float(tax)
