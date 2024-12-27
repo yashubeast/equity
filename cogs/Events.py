@@ -33,10 +33,11 @@ class EventCog(commands.Cog):
         bonus = DB.bonus_rate()
         lastmessage = datetime.datetime.strptime(lastmessage, "%Y-%m-%d %H:%M:%S.%f")
         time_difference = (current_datetime - lastmessage).total_seconds()
-        time_difference = time_difference * .15
-        if time_difference > 1:
-            time_difference = 1
-        total = len(message.content) * (1+(bonus*messages)) * time_difference
+        time_value = time_difference * .15
+        if time_value > 1:
+            overflowValue = (time_difference - 7) * .01
+            time_value = 1 + overflowValue
+        total = len(message.content) * (1+(bonus*messages)) * time_value
         tax = DB.tax_rate()
         userCoins = int(total)
         totaltax = userCoins * float(tax)
