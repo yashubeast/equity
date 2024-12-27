@@ -142,7 +142,7 @@ class CommandsCog(commands.Cog):
     @app_commands.command(name="bonus", description="Set Message Bonus Rate")
     @app_commands.checks.has_permissions(administrator=True)
     @app_commands.describe(tax="enter numeric bonus rate between 0-100")
-    async def set_taxrate(self, itx: discord.Interaction, bonus: str):
+    async def set_bonusrate(self, itx: discord.Interaction, bonus: str):
         try:
             # Attempt to convert the value to a number (integer or float)
             float_value = float(bonus)
