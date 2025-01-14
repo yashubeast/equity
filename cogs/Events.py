@@ -39,11 +39,9 @@ class EventCog(commands.Cog):
             time_value = 1 + overflowValue
         total = len(message.content) * (1+(bonus*messages)) * time_value
         tax = DB.tax_rate()
-        userCoins = int(total)
-        totaltax = userCoins * float(tax)
-        total = total - totaltax
-        userCoins = int(total)
-        Mastercoins = total - userCoins + totaltax
+        Mastercoins = int(total) * float(tax)
+        userCoins = int(total - Mastercoins)
+        Mastercoins = total - userCoins + Mastercoins
         DB.event_add(user.id,userCoins,Mastercoins,message)
 
     @commands.Cog.listener()
