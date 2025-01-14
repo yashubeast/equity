@@ -35,7 +35,7 @@ class EventCog(commands.Cog):
         time_difference = (current_datetime - lastmessage).total_seconds()
         time_value = time_difference * .15
         if time_value > 1:
-            overflowValue = (time_difference - 7) * .01
+            overflowValue = (time_difference - 7) * .0001
             time_value = 1 + overflowValue
         total = len(message.content) * (1+(bonus*messages)) * time_value
         tax = DB.tax_rate()
