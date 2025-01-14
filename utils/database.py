@@ -79,7 +79,7 @@ class BankDB:
         self.cursor.execute('''SELECT Value FROM Settings Where Item = 'Bonus' ''')
         result = self.cursor.fetchone()
         if result is None:
-            return 0.1
+            return 0.001
         return result[0]
     
     def set_bonus(self, rate):
