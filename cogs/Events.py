@@ -31,6 +31,7 @@ class EventCog(commands.Cog):
         messages = DB.get_messages(user.id)
         lastmessage = DB.get_last_message(user.id)
         bonus = DB.bonus_rate()
+        bonus = float(bonus)
         lastmessage = datetime.datetime.strptime(lastmessage, "%Y-%m-%d %H:%M:%S.%f")
         time_difference = (current_datetime - lastmessage).total_seconds()
         time_value = time_difference * .15
