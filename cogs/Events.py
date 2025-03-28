@@ -1,4 +1,5 @@
 import discord
+import math
 from discord.ext import commands, tasks
 from discord import app_commands
 from utils.database import BankDB
@@ -36,7 +37,7 @@ class EventCog(commands.Cog):
         time_difference = (current_datetime - lastmessage).total_seconds()
         time_value = time_difference * .15
         if time_value > 1:
-            overflowValue = (time_difference - 7) * .0001
+            overflowValue = 1.2 * (math.log(1 + time_difference - 7) / math.log(61))
             time_value = 1 + overflowValue
         total = len(message.content) * (1+(bonus*messages)) * time_value
         tax = DB.tax_rate()
