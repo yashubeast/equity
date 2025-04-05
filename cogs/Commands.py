@@ -123,37 +123,37 @@ class CommandsCog(commands.Cog):
     def __init__(self, bot: commands.Bot):
         self.bot = bot
 
-    @app_commands.command(name="tax", description="Set Tax Rate")
-    @app_commands.checks.has_permissions(administrator=True)
-    @app_commands.describe(tax="enter numeric tax rate between 0-100")
-    async def set_taxrate(self, itx: discord.Interaction, tax: str):
-        try:
+#    @app_commands.command(name="tax", description="Set Tax Rate")
+#    @app_commands.checks.has_permissions(administrator=True)
+#    @app_commands.describe(tax="enter numeric tax rate between 0-100")
+#    async def set_taxrate(self, itx: discord.Interaction, tax: str):
+#        try:
             # Attempt to convert the value to a number (integer or float)
-            float_value = float(tax)
-        except ValueError:
+#            float_value = float(tax)
+#        except ValueError:
             # If a ValueError occurs, the value cannot be converted to a number
-            await itx.response.send_message("The tax rate could not be evaluated. Please enter a numeric value between 0-100", ephemeral=True)
-            return
-        DB = BankDB()
-        float_value = float_value / 100
-        DB.set_tax(float_value)
-        await itx.response.send_message(f"The tax rate has been set to {tax}", ephemeral=True)
+#            await itx.response.send_message("The tax rate could not be evaluated. Please enter a numeric value between 0-100", ephemeral=True)
+#            return
+#        DB = BankDB()
+#        float_value = float_value / 100
+#        DB.set_tax(float_value)
+#        await itx.response.send_message(f"The tax rate has been set to {tax}", ephemeral=True)
 
-    @app_commands.command(name="bonus", description="Set Message Bonus Rate")
-    @app_commands.checks.has_permissions(administrator=True)
-    @app_commands.describe(bonus="enter numeric bonus rate between 0-100")
-    async def set_bonusrate(self, itx: discord.Interaction, bonus: str):
-        try:
+#    @app_commands.command(name="bonus", description="Set Message Bonus Rate")
+#    @app_commands.checks.has_permissions(administrator=True)
+#    @app_commands.describe(bonus="enter numeric bonus rate between 0-100")
+#    async def set_bonusrate(self, itx: discord.Interaction, bonus: str):
+#        try:
             # Attempt to convert the value to a number (integer or float)
-            float_value = float(bonus)
-        except ValueError:
-            # If a ValueError occurs, the value cannot be converted to a number
-            await itx.response.send_message("The bonus rate could not be evaluated. Please enter a numeric value between 0-100", ephemeral=True)
-            return
-        DB = BankDB()
-        float_value = float_value / 100
-        DB.set_bonus(float_value)
-        await itx.response.send_message(f"The bonus rate has been set to {bonus}", ephemeral=True)
+#            float_value = float(bonus)
+#        except ValueError:
+#            # If a ValueError occurs, the value cannot be converted to a number
+#            await itx.response.send_message("The bonus rate could not be evaluated. Please enter a numeric value between 0-100", ephemeral=True)
+#            return
+#        DB = BankDB()
+#        float_value = float_value / 100
+#        DB.set_bonus(float_value)
+#        await itx.response.send_message(f"The bonus rate has been set to {bonus}", ephemeral=True)
 
     @app_commands.command(name="coins", description="Check how many coins you have")
     async def myCoins(self, itx: discord.Interaction):
