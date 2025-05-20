@@ -1,9 +1,9 @@
-import discord
-import math
-from discord.ext import commands, tasks
-from discord import app_commands
-from utils.database import BankDB
 import datetime
+import math
+
+from discord.ext import commands, tasks
+
+from utils.database import BankDB
 
 
 class EventCog(commands.Cog):

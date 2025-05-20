@@ -1,10 +1,8 @@
-# Built In Library
 import os
 
-# 3rd Party Libraries
-from dotenv import load_dotenv
 import discord
 from discord.ext import commands
+from dotenv import load_dotenv
 
 intents = discord.Intents.default()
 intents.message_content = True
