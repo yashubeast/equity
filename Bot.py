@@ -12,10 +12,8 @@ load_dotenv()
 class EconomyBot(commands.Bot):
     def __init__(self):
         super().__init__(
-            command_prefix='!',
-            case_insensitive=True,
-            help_command=None,
-            intents=intents)
+            command_prefix="!", case_insensitive=True, help_command=None, intents=intents
+        )
 
     async def setup_hook(self):
         for ext in os.listdir("./cogs"):

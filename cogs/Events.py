@@ -12,7 +12,7 @@ class EventCog(commands.Cog):
         self.bot = bot
         self.fulfillcontracts.start()
 
-    @tasks.loop(time=datetime.time(12,0))  # Executes at 12:00 PM every day
+    @tasks.loop(time=datetime.time(12, 0))  # Executes at 12:00 PM every day
     async def fulfillcontracts(self):
         DB = BankDB()
         DB.fulfill_contracts()
@@ -35,21 +35,22 @@ class EventCog(commands.Cog):
         bonus = float(bonus)
         lastmessage = datetime.datetime.strptime(lastmessage, "%Y-%m-%d %H:%M:%S.%f")
         time_difference = (current_datetime - lastmessage).total_seconds()
-        time_value = time_difference * .15
+        time_value = time_difference * 0.15
         if time_value > 1:
             overflowValue = 1.2 * (math.log(1 + (time_difference - 7 / 60)) / math.log(61))
             time_value = 1 + overflowValue
-        total = len(message.content) * (1+(bonus*messages)) * time_value
+        total = len(message.content) * (1 + (bonus * messages)) * time_value
         tax = DB.tax_rate()
         Mastercoins = int(total) * float(tax)
         userCoins = int(total - Mastercoins)
         Mastercoins = total - userCoins + Mastercoins
-        DB.event_add(user.id,userCoins,Mastercoins,message)
+        DB.event_add(user.id, userCoins, Mastercoins, message)
 
     @commands.Cog.listener()
     async def on_raw_message_delete(self, payload):
         DB = BankDB()
         DB.delete_message(payload.message_id)
+
 
 async def setup(bot: commands.Bot) -> None:
     await bot.add_cog(EventCog(bot))
