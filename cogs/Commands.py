@@ -189,7 +189,7 @@ class CommandsCog(commands.Cog):
 
         async with aiohttp.ClientSession() as session:
             async with session.get(
-                f"{os.getenv("magi")}/balance",
+                f"{os.getenv('magi')}/balance",
                 json={
                     "user_id": str(itx.user.id)
                 }
@@ -220,7 +220,7 @@ class CommandsCog(commands.Cog):
 
         async with aiohttp.ClientSession() as session:
             async with session.post(
-                f"{os.getenv("magi")}/pay",
+                f"{os.getenv('magi')}/pay",
                 json={
                     "sender_id": sender_id,
                     "receiver_id": receiver_id,

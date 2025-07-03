@@ -36,7 +36,7 @@ class EventCog(commands.Cog):
 
         async with aiohttp.ClientSession() as session:
             async with session.post(
-                f"{os.getenv("magi")}/eval",
+                f"{os.getenv('magi')}/eval",
                 json={
                     "user_id": user_id,
                     "message_id": message_id,
@@ -57,7 +57,7 @@ class EventCog(commands.Cog):
 
         async with aiohttp.ClientSession() as session:
             async with session.delete(
-                f"{os.getenv("magi")}/del",
+                f"{os.getenv('magi')}/del",
                 json={
                     "message_id": message_id,
                 }
