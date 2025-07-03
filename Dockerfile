@@ -13,7 +13,7 @@ RUN git clone https://github.com/yashubeast/equity.git .
 
 # create python virtual environment
 RUN python -m venv .venv && \
-	.venv/bin/pip install --no-cache-dir -r req.txt
+	.venv/bin/pip install --no-cache-dir -r requirements.txt
 
 # ==============================final stage==============================
 FROM python:3.11-slim
@@ -34,8 +34,7 @@ WORKDIR /opt/equity
 COPY --from=builder /build /opt/equity
 
 # change ownership
-RUN chown -R equity:equity /opt/equity && \
-	chmod +x run.sh
+RUN chown -R equity:equity /opt/equity
 
 # switch to non-root user
 USER equity
@@ -45,4 +44,3 @@ ENV PATH="/opt/equity/.venv/bin:$PATH"
 
 # run the bot
 CMD ["python", "Bot.py"]
-

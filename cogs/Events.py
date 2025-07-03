@@ -1,8 +1,11 @@
+import os
 import datetime
 import math
 import aiohttp
 
 from discord.ext import commands
+
+from dotenv import load_dotenv
 
 class EventCog(commands.Cog):
 
@@ -33,7 +36,7 @@ class EventCog(commands.Cog):
 
         async with aiohttp.ClientSession() as session:
             async with session.post(
-                "http://localhost:8000/equity/eval",
+                f"{os.getenv("magi")}/eval",
                 json={
                     "user_id": user_id,
                     "message_id": message_id,
@@ -54,7 +57,7 @@ class EventCog(commands.Cog):
 
         async with aiohttp.ClientSession() as session:
             async with session.delete(
-                "http://localhost:8000/equity/del",
+                f"{os.getenv("magi")}/del",
                 json={
                     "message_id": message_id,
                 }
