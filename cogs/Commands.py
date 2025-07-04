@@ -1,3 +1,4 @@
+from math import e
 import os
 import aiohttp
 
@@ -187,6 +188,8 @@ class CommandsCog(commands.Cog):
     @app_commands.command(name="balance", description="Check your Equity balance")
     async def myCoins(self, itx: discord.Interaction):
 
+        await itx.response.defer(ephemeral=True, thinking=True)
+
         async with aiohttp.ClientSession() as session:
             async with session.get(
                 f"{os.getenv('magi')}/balance",
@@ -196,10 +199,10 @@ class CommandsCog(commands.Cog):
             ) as resp:
                 data = await resp.json()
                 if resp.status == 200:
-                    print(f'balance {data}')
+                    print(f'balance: {data['result']}')
                 else:
-                    print(f'balance error: {resp.status} {data}')
-                    await itx.response.send_message('Trouble fetching balance')
+                    print(f'balance error {resp.status}: {data}')
+                    await itx.edit_original_response(content='Trouble fetching balance')
                     return
 
         embed = discord.Embed(
@@ -212,10 +215,12 @@ class CommandsCog(commands.Cog):
 
         embed.set_footer(text="Universium", icon_url=itx.guild.icon)
 
-        await itx.response.send_message(embed=embed, ephemeral=True)
+        await itx.edit_original_response(embed=embed)
 
     @app_commands.command(name="pay", description="Give another user Equity")
     async def tradecoins(self, itx: discord.Interaction, user: discord.Member, coins: int):
+
+        await itx.response.defer(ephemeral=True, thinking=True)
 
         sender_id = str(itx.user.id)
         receiver_id = str(user.id)
@@ -231,13 +236,17 @@ class CommandsCog(commands.Cog):
             ) as resp:
                 data = await resp.json()
                 if resp.status == 200:
-                    print(f'pay from {itx.user} to {user} amt {coins} and {data}')
-                    await itx.response.send_message(f"You gave {user} {coins} Equity", ephemeral=True)
+                    print(f'pay: {coins} {itx.user} -> {user}')
+                    await itx.edit_original_response(content=f"You gave {user} {coins} Equity")
+                    return
+                elif resp.status == 400:
+                    print(f'pay error {resp.status}: {coins} {itx.user} -> {user} {data['result']}')
+                    await itx.edit_original_response(content=data['result'])
                     return
                 else:
-                    print(f'pay error: {resp.status} {data}')
+                    print(f'pay error {resp.status}: {data}')
                     # await itx.response.send_message(f"You dont have {coins} coins to give to {user}.")
-                    await itx.response.send_message(f"Trouble sending Equity to {user}")
+                    await itx.edit_original_response(content=f"Trouble sending Equity to {user}")
                     return
 
 
