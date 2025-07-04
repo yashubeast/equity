@@ -194,10 +194,12 @@ class CommandsCog(commands.Cog):
                     "user_id": str(itx.user.id)
                 }
             ) as resp:
+                data = await resp.json()
                 if resp.status == 200:
-                    data = await resp.json()
+                    print(f'balance {data}')
                 else:
-                    print(f'error: {resp.status}')
+                    print(f'balance error: {resp.status} {data}')
+                    await itx.response.send_message('Trouble fetching balance')
                     return
 
         embed = discord.Embed(
@@ -227,11 +229,13 @@ class CommandsCog(commands.Cog):
                     "amount": coins
                 }
             ) as resp:
+                data = await resp.json()
                 if resp.status == 200:
+                    print(f'pay from {itx.user} to {user} amt {coins} and {data}')
                     await itx.response.send_message(f"You gave {user} {coins} Equity", ephemeral=True)
                     return
                 else:
-                    print(f'error: {resp.status}')
+                    print(f'pay error: {resp.status} {data}')
                     # await itx.response.send_message(f"You dont have {coins} coins to give to {user}.")
                     await itx.response.send_message(f"Trouble sending Equity to {user}")
                     return

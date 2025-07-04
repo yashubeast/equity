@@ -44,11 +44,11 @@ class EventCog(commands.Cog):
                     "timestamp": timestamp,
                 }
             ) as resp:
+                data = await resp.json()
                 if resp.status == 200:
-                    data = await resp.json()
-                    print(f'{user_id}: {message_id} -> len: {message_length}, time: {timestamp}')
+                    print(f'eval: {user}, {message_id} -> {data}')
                 else:
-                    print(f"api error: {resp.status}")
+                    print(f"eval error: {resp.status} {data}")
 
     @commands.Cog.listener()
     async def on_raw_message_delete(self, payload):
@@ -62,10 +62,11 @@ class EventCog(commands.Cog):
                     "message_id": message_id,
                 }
             ) as resp:
+                data = await resp.json()
                 if resp.status == 200:
                     print(f'msg deleted: {message_id}')
                 else:
-                    print(f"api error: {resp.status}")
+                    print(f"del error: {resp.status} {data}")
 
 async def setup(bot: commands.Bot) -> None:
     await bot.add_cog(EventCog(bot))
