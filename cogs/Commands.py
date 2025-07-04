@@ -199,7 +199,7 @@ class CommandsCog(commands.Cog):
             ) as resp:
                 data = await resp.json()
                 if resp.status == 200:
-                    print(f'balance: {data["result"]}')
+                    print(f"balance: {data['result']}")
                 else:
                     print(f'balance error {resp.status}: {data}')
                     await itx.edit_original_response(content='Trouble fetching balance')
