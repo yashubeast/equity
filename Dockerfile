@@ -42,5 +42,8 @@ USER equity
 # set virtual environment
 ENV PATH="/opt/equity/.venv/bin:$PATH"
 
+# disable output buffering
+ENV PYTHONUNBUFFERED=1
+
 # run the bot
 CMD ["python", "Bot.py"]

@@ -237,7 +237,7 @@ class CommandsCog(commands.Cog):
                 data = await resp.json()
                 if resp.status == 200:
                     print(f'pay: {coins} {itx.user} -> {user}')
-                    await itx.edit_original_response(content=f"You gave {user} {coins} Equity")
+                    await itx.edit_original_response(content=f"You gave {user.mention} {coins} Equity")
                     return
                 elif resp.status == 400:
                     print(f'pay error {resp.status}: {coins} {itx.user} -> {user} {data["result"]}')
