@@ -46,7 +46,7 @@ class EventCog(commands.Cog):
             ) as resp:
                 data = await resp.json()
                 if resp.status == 200:
-                    print(f'eval: {user}, {message_id} -> +{data['result']}')
+                    print(f'eval: {user}, {message_id} -> +{data["result"]}')
                 else:
                     print(f"eval error: {resp.status} {data}")
 
@@ -64,7 +64,7 @@ class EventCog(commands.Cog):
             ) as resp:
                 data = await resp.json()
                 if resp.status == 200:
-                    print(f'del: {message_id} -> -{data['result']}')
+                    print(f'del: {message_id} -> -{data["result"]}')
                 else:
                     print(f"del error {resp.status}: {data['result']}")
 

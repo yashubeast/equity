@@ -199,7 +199,7 @@ class CommandsCog(commands.Cog):
             ) as resp:
                 data = await resp.json()
                 if resp.status == 200:
-                    print(f'balance: {data['result']}')
+                    print(f'balance: {data["result"]}')
                 else:
                     print(f'balance error {resp.status}: {data}')
                     await itx.edit_original_response(content='Trouble fetching balance')
@@ -240,7 +240,7 @@ class CommandsCog(commands.Cog):
                     await itx.edit_original_response(content=f"You gave {user} {coins} Equity")
                     return
                 elif resp.status == 400:
-                    print(f'pay error {resp.status}: {coins} {itx.user} -> {user} {data['result']}')
+                    print(f'pay error {resp.status}: {coins} {itx.user} -> {user} {data["result"]}')
                     await itx.edit_original_response(content=data['result'])
                     return
                 else:
