@@ -186,7 +186,7 @@ class CommandsCog(commands.Cog):
     #        await itx.response.send_message(f"The bonus rate has been set to {bonus}", ephemeral=True)
 
     @app_commands.command(name="balance", description="Check your Equity balance")
-    async def myCoins(self, itx: discord.Interaction):
+    async def balance(self, itx: discord.Interaction):
 
         await itx.response.defer(ephemeral=True, thinking=True)
 
@@ -199,9 +199,9 @@ class CommandsCog(commands.Cog):
             ) as resp:
                 data = await resp.json()
                 if resp.status == 200:
-                    print(f"balance: {data['result']}")
+                    print(f"balance: {itx.user} {data['result']}")
                 else:
-                    print(f'balance error {resp.status}: {data}')
+                    print(f'balance error {resp.status} {itx.user}: {data}')
                     await itx.edit_original_response(content='Trouble fetching balance')
                     return
 
@@ -213,14 +213,15 @@ class CommandsCog(commands.Cog):
             url=itx.user.avatar.url if itx.user.avatar.url else itx.user.default_avatar
         )
 
-        embed.set_footer(text="Universium", icon_url=itx.guild.icon)
+        embed.set_footer(text=itx.guild.name, icon_url=itx.guild.icon)
 
         await itx.edit_original_response(embed=embed)
 
     @app_commands.command(name="pay", description="Give another user Equity")
-    async def tradecoins(self, itx: discord.Interaction, user: discord.Member, coins: int):
+    @app_commands.describe(hide="whether to hide the message or not (True by default)")
+    async def pay(self, itx: discord.Interaction, user: discord.Member, amount: int, hide: bool = True):
 
-        await itx.response.defer(ephemeral=True, thinking=True)
+        await itx.response.defer(ephemeral=hide, thinking=True)
 
         sender_id = str(itx.user.id)
         receiver_id = str(user.id)
@@ -231,24 +232,24 @@ class CommandsCog(commands.Cog):
                 json={
                     "sender_id": sender_id,
                     "receiver_id": receiver_id,
-                    "amount": coins
+                    "amount": amount
                 }
             ) as resp:
                 data = await resp.json()
                 if resp.status == 200:
-                    print(f'pay: {coins} {itx.user} -> {user}')
-                    await itx.edit_original_response(content=f"You gave {user.mention} {coins} Equity")
+                    print(f'pay: {amount} {itx.user} -> {user}')
+                    await itx.edit_original_response(content=f"{"You" if hide else itx.user.mention} paid {user.mention} {amount} Equity",
+                        allowed_mentions=discord.AllowedMentions(users=False))
                     return
                 elif resp.status == 400:
-                    print(f'pay error {resp.status}: {coins} {itx.user} -> {user} {data["result"]}')
+                    print(f'pay error {resp.status} {amount} {itx.user} -> {user}: {data["result"]}')
                     await itx.edit_original_response(content=data['result'])
                     return
                 else:
-                    print(f'pay error {resp.status}: {data}')
+                    print(f'pay error {resp.status} {amount} {itx.user} -> {user}: {data}')
                     # await itx.response.send_message(f"You dont have {coins} coins to give to {user}.")
                     await itx.edit_original_response(content=f"Trouble sending Equity to {user}")
                     return
-
 
 async def setup(bot: commands.Bot) -> None:
     await bot.add_cog(CommandsCog(bot))
