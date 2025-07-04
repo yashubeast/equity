@@ -238,7 +238,7 @@ class CommandsCog(commands.Cog):
                 data = await resp.json()
                 if resp.status == 200:
                     print(f'pay: {amount} {itx.user} -> {user}')
-                    await itx.edit_original_response(content=f"{"You" if hide else itx.user.mention} paid {user.mention} {amount} Equity",
+                    await itx.edit_original_response(content=f"{'You' if hide else itx.user.mention} paid {user.mention} {amount} Equity",
                         allowed_mentions=discord.AllowedMentions(users=False))
                     return
                 elif resp.status == 400:
