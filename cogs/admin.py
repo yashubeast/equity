@@ -5,10 +5,11 @@ import discord
 from discord import app_commands
 from discord.ext import commands
 from dotenv import load_dotenv
+from utils.logger import log
 
 load_dotenv()
 
-class AdminsCog(commands.Cog):
+class admin(commands.Cog):
 
     def __init__(self, bot: commands.Bot):
         self.bot = bot
@@ -34,9 +35,9 @@ class AdminsCog(commands.Cog):
             ) as resp:
                 data = await resp.json()
                 if resp.status == 200:
-                    print(f"balance: {user} {data['result']} by {itx.user}")
+                    log.info(f"eq balance: {user} {data['result']} by {itx.user}")
                 else:
-                    print(f'balance error {resp.status} {user} by {itx.user}: {data}')
+                    log.warning(f"eq balance {resp.status}: {user} by {itx.user} => {data['result']}")
                     await itx.edit_original_response(content='Trouble fetching balance')
                     return
 
@@ -45,7 +46,7 @@ class AdminsCog(commands.Cog):
         )
 
         embed.set_thumbnail(
-            url=user.avatar.url if user.avatar.url else user.default_avatar
+            url=user.avatar if user.avatar else user.default_avatar
         )
 
         embed.set_footer(text=itx.guild.name, icon_url=itx.guild.icon)
@@ -76,21 +77,20 @@ class AdminsCog(commands.Cog):
             ) as resp:
                 data = await resp.json()
                 if resp.status == 200:
-                    print(f'penalize: {amount} {user} by {itx.user}')
+                    log.info(f"eq penalize: {amount} {user} by {itx.user}" + f"{', ' + reason if reason else ''}")
                     await itx.edit_original_response(content=f"Penalized {user.mention} for {amount} Equity",
                         allowed_mentions=discord.AllowedMentions(users=False))
                     if not hide:
-                        await itx.channel.send(f"Penalized {user.mention} for {amount} Equity, {reason}")
+                        await itx.channel.send(f"Penalized {user.mention} for {amount} Equity" + f"{', ' + reason if reason else ''}")
                     return
                 elif resp.status == 400:
-                    print(f'penalize error {resp.status} {amount} {user} by {itx.user}: {data["result"]}')
+                    log.warning(f"eq penalize {resp.status}: {amount} {user} by {itx.user} => {data['result']}")
                     await itx.edit_original_response(content=data['result'])
                     return
                 else:
-                    print(f'penalize error {resp.status} {amount} {user} by {itx.user}: {data}')
-                    # await itx.response.send_message(f"You dont have {amount} amount to give to {user}.")
+                    log.warning(f"eq penalize {resp.status}: {amount} {user} by {itx.user} => {data['result']}")
                     await itx.edit_original_response(content=f"Trouble penalizing {user}")
                     return
 
 async def setup(bot: commands.Bot) -> None:
-    await bot.add_cog(AdminsCog(bot))
+    await bot.add_cog(admin(bot))

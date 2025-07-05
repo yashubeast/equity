@@ -6,9 +6,9 @@ import discord
 from discord import app_commands
 from discord.ext import commands
 from dotenv import load_dotenv
+from utils.logger import log
 
 load_dotenv()
-
 
 # @app_commands.guild_only()
 # @app_commands.default_permissions(administrator=True)
@@ -78,7 +78,6 @@ load_dotenv()
 #             f"You do not control a contract with ID {contract_id}.", ephemeral=True
 #         )
 
-
 # class ContractGroup(
 #     commands.GroupCog, name="contract", description="Create/Manage contracts with other users"
 # ):
@@ -147,8 +146,7 @@ load_dotenv()
 #             f"You do not control a contract with ID {contract_id}.", ephemeral=True
 #         )
 
-
-class CommandsCog(commands.Cog):
+class general(commands.Cog):
 
     def __init__(self, bot: commands.Bot):
         self.bot = bot
@@ -199,9 +197,9 @@ class CommandsCog(commands.Cog):
             ) as resp:
                 data = await resp.json()
                 if resp.status == 200:
-                    print(f"balance: {itx.user} {data['result']}")
+                    log.info(f"balance: {itx.user} {data['result']}")
                 else:
-                    print(f'balance error {resp.status} {itx.user}: {data}')
+                    log.warning(f"balance {resp.status}: {itx.user} {data}")
                     await itx.edit_original_response(content='Trouble fetching balance')
                     return
 
@@ -237,21 +235,21 @@ class CommandsCog(commands.Cog):
             ) as resp:
                 data = await resp.json()
                 if resp.status == 200:
-                    print(f'pay: {amount} {itx.user} -> {user}')
+                    log.info(f"pay: {amount} {itx.user} -> {user}")
                     await itx.edit_original_response(content=f"{'You' if hide else itx.user.mention} paid {user.mention} {amount} Equity",
                         allowed_mentions=discord.AllowedMentions(users=False))
                     return
                 elif resp.status == 400:
-                    print(f'pay error {resp.status} {amount} {itx.user} -> {user}: {data["result"]}')
+                    log.warning(f"pay {resp.status}: {amount} {itx.user} -> {user} => {data['result']}")
                     await itx.edit_original_response(content=data['result'])
                     return
                 else:
-                    print(f'pay error {resp.status} {amount} {itx.user} -> {user}: {data}')
+                    log.warning(f"pay {resp.status}: {amount} {itx.user} -> {user} => {data['result']}")
                     # await itx.response.send_message(f"You dont have {coins} coins to give to {user}.")
                     await itx.edit_original_response(content=f"Trouble sending Equity to {user}")
                     return
 
 async def setup(bot: commands.Bot) -> None:
-    await bot.add_cog(CommandsCog(bot))
+    await bot.add_cog(general(bot))
     # await bot.add_cog(ContractGroup(bot))
     # await bot.add_cog(AdminContractGroup(bot))

@@ -3,11 +3,12 @@ import os
 import discord
 from discord.ext import commands
 from dotenv import load_dotenv
+from utils.logger import log
+from utils.cogs import load_all_cogs
 
 intents = discord.Intents.default()
 intents.message_content = True
 load_dotenv()
-
 
 class EconomyBot(commands.Bot):
     def __init__(self):
@@ -16,18 +17,14 @@ class EconomyBot(commands.Bot):
         )
 
     async def setup_hook(self):
-        for ext in os.listdir("./cogs"):
-            if ext.endswith(".py"):
-                await bot.load_extension(f"cogs.{ext[:-3]}")
-                print(ext)
+        await load_all_cogs(self)
         await bot.tree.sync()
 
     async def on_ready(self):
-        print(f"Connected to {self.user}")
-        print(discord.__version__)
-
+        log.info("connected as %s", self.user)
+        log.info("discord.py version %s", discord.__version__)
 
 if __name__ == "__main__":
 
     bot = EconomyBot()
-    bot.run(os.getenv("Token"))
+    bot.run(os.environ["Token"])

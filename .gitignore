@@ -41,3 +41,6 @@ coverage.xml
 # SQLite database
 *.db
 database.db
+
+# custom ig
+assets/

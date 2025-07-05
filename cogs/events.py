@@ -4,8 +4,8 @@ import math
 import aiohttp
 
 from discord.ext import commands
-
 from dotenv import load_dotenv
+from utils.logger import log
 
 class EventCog(commands.Cog):
 
@@ -46,9 +46,9 @@ class EventCog(commands.Cog):
             ) as resp:
                 data = await resp.json()
                 if resp.status == 200:
-                    print(f'eval: {user}, {message_id} -> +{data["result"]}')
+                    log.info(f"eval: {user} +{data['result']}")
                 else:
-                    print(f"eval error: {resp.status} {data}")
+                    log.warning(f"eval {resp.status}: {user} => {data['result']}")
 
     @commands.Cog.listener()
     async def on_raw_message_delete(self, payload):
@@ -64,9 +64,9 @@ class EventCog(commands.Cog):
             ) as resp:
                 data = await resp.json()
                 if resp.status == 200:
-                    print(f'del: {message_id} -> -{data["result"]}')
+                    log.info(f"del: {message_id} -{data['result']}")
                 else:
-                    print(f"del error {resp.status}: {data['result']}")
+                    log.warning(f"del {resp.status}: {message_id} => {data['result']}")
 
 async def setup(bot: commands.Bot) -> None:
     await bot.add_cog(EventCog(bot))
