@@ -1,5 +1,8 @@
 FROM python:3.11-slim
 
+# set working directory
+WORKDIR /opt/equity
+
 # install git and other dependencies
 RUN apt-get update && \
 	apt-get install -y git && \
@@ -15,9 +18,6 @@ RUN python -m venv .venv && \
 # create non-root user and group
 # RUN addgroup --system equity && \
 # 	adduser --system --ingroup equity --home /opt/equity equity
-
-# set working directory
-WORKDIR /opt/equity
 
 # change ownership
 # RUN chown -R equity:equity /opt/equity
