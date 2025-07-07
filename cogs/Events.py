@@ -6,8 +6,9 @@ import aiohttp
 from discord.ext import commands
 from dotenv import load_dotenv
 from utils.logger import log
+from utils.lib import serverID, apiLink
 
-class EventCog(commands.Cog):
+class Events(commands.Cog):
 
     def __init__(self, bot: commands.Bot):
         self.bot = bot
@@ -25,9 +26,11 @@ class EventCog(commands.Cog):
 
     @commands.Cog.listener()
     async def on_message(self, message):
+
         user = (message.author)
-        if message.author.bot:
-            return
+
+        if user.bot:return
+        if not message.guild or message.guild.id != serverID:return
 
         user_id = str(user.id)
         message_id = str(message.id)
@@ -36,7 +39,7 @@ class EventCog(commands.Cog):
 
         async with aiohttp.ClientSession() as session:
             async with session.post(
-                f"{os.getenv('magi')}/eval",
+                f"{apiLink}/eval",
                 json={
                     "user_id": user_id,
                     "message_id": message_id,
@@ -52,12 +55,14 @@ class EventCog(commands.Cog):
 
     @commands.Cog.listener()
     async def on_raw_message_delete(self, payload):
+
+        if payload.guild_id != serverID:return
         
         message_id = str(payload.message_id)
 
         async with aiohttp.ClientSession() as session:
             async with session.delete(
-                f"{os.getenv('magi')}/del",
+                f"{apiLink}/del",
                 json={
                     "message_id": message_id,
                 }
@@ -69,4 +74,4 @@ class EventCog(commands.Cog):
                     log.warning(f"del {resp.status}: {message_id} => {data['result']}")
 
 async def setup(bot: commands.Bot) -> None:
-    await bot.add_cog(EventCog(bot))
+    await bot.add_cog(Events(bot))

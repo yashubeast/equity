@@ -6,10 +6,11 @@ from discord import app_commands
 from discord.ext import commands
 from dotenv import load_dotenv
 from utils.logger import log
+from utils.lib import serverID, apiLink
 
 load_dotenv()
 
-class admin(commands.Cog):
+class Admin(commands.Cog):
 
     def __init__(self, bot: commands.Bot):
         self.bot = bot
@@ -17,7 +18,8 @@ class admin(commands.Cog):
     eq = app_commands.Group(
         name='eq',
         description='admin only commands',
-        default_permissions=discord.Permissions(administrator=True)
+        default_permissions=discord.Permissions(administrator=True),
+        guild_ids=[serverID]
     )
 
     @eq.command(name="balance", description="Check Equity balance of user")
@@ -28,7 +30,7 @@ class admin(commands.Cog):
 
         async with aiohttp.ClientSession() as session:
             async with session.get(
-                f"{os.getenv('magi')}/balance",
+                f"{apiLink}/balance",
                 json={
                     "user_id": str(user.id)
                 }
@@ -68,7 +70,7 @@ class admin(commands.Cog):
 
         async with aiohttp.ClientSession() as session:
             async with session.post(
-                f"{os.getenv('magi')}/pay",
+                f"{apiLink}/pay",
                 json={
                     "sender_id": sender_id,
                     "receiver_id": receiver_id,
@@ -93,4 +95,4 @@ class admin(commands.Cog):
                     return
 
 async def setup(bot: commands.Bot) -> None:
-    await bot.add_cog(admin(bot))
+    await bot.add_cog(Admin(bot))

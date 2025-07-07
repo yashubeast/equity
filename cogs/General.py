@@ -7,6 +7,7 @@ from discord import app_commands
 from discord.ext import commands
 from dotenv import load_dotenv
 from utils.logger import log
+from utils.lib import apiLink
 
 load_dotenv()
 
@@ -146,7 +147,7 @@ load_dotenv()
 #             f"You do not control a contract with ID {contract_id}.", ephemeral=True
 #         )
 
-class general(commands.Cog):
+class General(commands.Cog):
 
     def __init__(self, bot: commands.Bot):
         self.bot = bot
@@ -190,7 +191,7 @@ class general(commands.Cog):
 
         async with aiohttp.ClientSession() as session:
             async with session.get(
-                f"{os.getenv('magi')}/balance",
+                f"{apiLink}/balance",
                 json={
                     "user_id": str(itx.user.id)
                 }
@@ -226,7 +227,7 @@ class general(commands.Cog):
 
         async with aiohttp.ClientSession() as session:
             async with session.post(
-                f"{os.getenv('magi')}/pay",
+                f"{apiLink}/pay",
                 json={
                     "sender_id": sender_id,
                     "receiver_id": receiver_id,
@@ -250,6 +251,6 @@ class general(commands.Cog):
                     return
 
 async def setup(bot: commands.Bot) -> None:
-    await bot.add_cog(general(bot))
+    await bot.add_cog(General(bot))
     # await bot.add_cog(ContractGroup(bot))
     # await bot.add_cog(AdminContractGroup(bot))
