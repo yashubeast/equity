@@ -6,7 +6,7 @@ from utils.logger import log
 async def load_all_cogs(bot):
 	for root, _, files in os.walk("./cogs"):
 		for file in files:
-			if file.endswith(".py"):
+			if file.endswith(".py") and file != "__init__.py":
 				# get module path, e.g. cogs/admin/mod.py -> cogs.admin.mod
 				rel_path = os.path.relpath(os.path.join(root, file), ".")
 				module_path = rel_path[:-3].replace(os.path.sep, ".")

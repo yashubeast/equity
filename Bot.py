@@ -6,6 +6,7 @@ from dotenv import load_dotenv
 from utils.logger import log
 from utils.cogs import load_all_cogs
 from utils.lib import serverID
+from utils.error import app_command_error_handler
 
 intents = discord.Intents.default()
 intents.message_content = True
@@ -18,9 +19,10 @@ class EconomyBot(commands.Bot):
         )
 
     async def setup_hook(self):
+        self.tree.error(app_command_error_handler)
         await load_all_cogs(self)
-        await self.tree.sync()
-        await self.tree.sync(guild=discord.Object(id=serverID))
+        # await self.tree.sync()
+        # await self.tree.sync(guild=discord.Object(id=serverID))
 
     async def on_ready(self):
         log.info("connected as %s", self.user)
