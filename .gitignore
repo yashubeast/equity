@@ -14,9 +14,6 @@ VENV/
 # Environment variables file
 .env
 
-# jetbrains
-.idea/
-
 # VSCode settings
 .vscode/
 
