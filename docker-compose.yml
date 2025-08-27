@@ -1,0 +1,10 @@
+services:
+  equity:
+    image: equity
+    container_name: equity
+    restart: unless-stopped
+    environment:
+      Token: ${Token}
+      ServerID: ${ServerID}
+      apiLink: ${apiLink}
+      admin_list: ${admin_list}
